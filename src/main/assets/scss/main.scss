@@ -3,6 +3,7 @@
 /* Task table layout */
 .task-table-wrapper {
   width: 100%;
+  margin-top: 0;
   overflow-x: auto;
 }
 
@@ -12,13 +13,9 @@
   table-layout: fixed;
 }
 
-/* Align Your tasks with the search box. */
+/* Task list heading */
 .task-list-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .task-list-header .govuk-heading-l {
@@ -26,11 +23,16 @@
   margin-bottom: 0;
 }
 
+/* Search box below the heading */
 .task-search-group {
-  flex: 0 1 432px;
   width: 100%;
   max-width: 432px;
-  margin-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 40px;
+}
+
+.task-search-group .govuk-label {
+  margin-bottom: 5px;
 }
 
 .task-search-group .govuk-input {
@@ -204,7 +206,7 @@
   margin: 0;
 }
 
-/* Mobile layout */
+/* Responsive task table layout */
 @media (width >= 40em) {
   .task-table {
     min-width: 900px;
@@ -212,15 +214,5 @@
 
   .task-status {
     font-size: 14px;
-  }
-
-  .task-list-header {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .task-search-group {
-    max-width: none;
   }
 }

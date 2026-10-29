@@ -1,4 +1,3 @@
-
 {% extends "template.njk" %}
 
 {% block content %}
@@ -21,26 +20,24 @@
 
   <div class="task-list-header">
     <h2 class="govuk-heading-l">Your tasks</h2>
-
-    {% if tasks and tasks.length > 0 %}
-      <div class="govuk-form-group task-search-group">
-        <label class="govuk-label" for="task-search">
-          Search tasks
-        </label>
-
-        <input
-          class="govuk-input"
-          id="task-search"
-          name="search"
-          type="search"
-          placeholder="Search by ID, title or description"
-          autocomplete="off"
-        >
-      </div>
-    {% endif %}
   </div>
 
   {% if tasks and tasks.length > 0 %}
+
+    <div class="govuk-form-group task-search-group">
+      <label class="govuk-label" for="task-search">
+        Search tasks
+      </label>
+
+      <input
+        class="govuk-input"
+        id="task-search"
+        name="search"
+        type="search"
+        placeholder="Search by ID, title or description"
+        autocomplete="off"
+      >
+    </div>
 
     <div class="task-table-wrapper">
       <table class="govuk-table task-table">
@@ -271,7 +268,7 @@
             .textContent.toLowerCase();
 
           const matches =
-            taskId.includes(normalisedSearch) ||
+            taskId === normalisedSearch ||
             title.includes(searchTerm) ||
             description.includes(searchTerm);
 
