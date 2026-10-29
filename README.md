@@ -25,4 +25,3 @@ yarn start:dev
 ```
 
 Alternatively, run the relevant scripts defined in `package.json`.
-

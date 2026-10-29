@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import { Application } from 'express';
 
@@ -15,9 +14,7 @@ export default function (app: Application): void {
   app.get('/', async (req, res) => {
     try {
       // Fetch real tasks from the Spring Boot backend.
-      const response = await axios.get<Task[]>(
-        'http://localhost:4000/api/tasks',
-      );
+      const response = await axios.get<Task[]>('http://localhost:4000/api/tasks');
 
       // Pass the tasks to the Nunjucks template.
       res.render('home', {

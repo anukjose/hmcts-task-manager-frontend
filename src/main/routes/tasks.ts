@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import { Application } from 'express';
 
@@ -44,8 +43,7 @@ export default function (app: Application): void {
 
     // Validate the description length.
     if (formData.description.length > 5000) {
-      errors.description =
-        'The description must be 5000 characters or fewer';
+      errors.description = 'The description must be 5000 characters or fewer';
     }
 
     // Only accept statuses supported by the backend.
@@ -84,10 +82,7 @@ export default function (app: Application): void {
     };
 
     try {
-      await axios.post(
-        'http://localhost:4000/api/tasks',
-        requestBody,
-      );
+      await axios.post('http://localhost:4000/api/tasks', requestBody);
 
       // Return to the task list after successful creation.
       return res.redirect('/');
@@ -103,7 +98,7 @@ export default function (app: Application): void {
     }
   });
 
-    // Update a task's status using the existing Spring Boot API.
+  // Update a task's status using the existing Spring Boot API.
   app.post('/tasks/:id/status', async (req, res) => {
     const taskId = Number(req.params.id);
     const status = String(req.body.status ?? '');
@@ -111,16 +106,12 @@ export default function (app: Application): void {
     // Only allow the three statuses supported by the backend.
     const validStatuses = ['TODO', 'IN_PROGRESS', 'COMPLETED'];
 
-    if (!Number.isInteger(taskId) || taskId <= 0 ||
-        !validStatuses.includes(status)) {
+    if (!Number.isInteger(taskId) || taskId <= 0 || !validStatuses.includes(status)) {
       return res.redirect('/');
     }
 
     try {
-      await axios.patch(
-        `http://localhost:4000/api/tasks/${taskId}/status`,
-        { status },
-      );
+      await axios.patch(`http://localhost:4000/api/tasks/${taskId}/status`, { status });
 
       return res.redirect('/');
     } catch (error) {
@@ -138,9 +129,7 @@ export default function (app: Application): void {
     }
 
     try {
-      await axios.delete(
-        `http://localhost:4000/api/tasks/${taskId}`,
-      );
+      await axios.delete(`http://localhost:4000/api/tasks/${taskId}`);
 
       return res.redirect('/');
     } catch (error) {
