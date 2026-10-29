@@ -3913,7 +3913,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^4.0.1":
+"chokidar@npm:^4.0.1, chokidar@npm:^4.0.3":
   version: 4.0.3
   resolution: "chokidar@npm:4.0.3"
   dependencies:
@@ -6208,6 +6208,7 @@ __metadata:
     "@types/supertest": "npm:^7.2.0"
     "@typescript-eslint/parser": "npm:^8.62.1"
     axios: "npm:^1.18.1"
+    chokidar: "npm:^4.0.3"
     codeceptjs: "npm:^4.0.8"
     cookie-parser: "npm:^1.4.7"
     copy-webpack-plugin: "npm:^14.0.0"

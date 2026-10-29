@@ -27,6 +27,7 @@
     "@types/nunjucks": "^3.2.6",
     "@types/serve-favicon": "^2.5.7",
     "axios": "^1.18.1",
+    "chokidar": "^4.0.3",
     "cookie-parser": "^1.4.7",
     "express": "^5.2.1",
     "glob": "^13.0.6",

@@ -1,13 +1,28 @@
-# HMCTS Dev Test Frontend
+# HMCTS Caseworker Task Management System : Frontend
 
-This will be the frontend for the brand new HMCTS case management system. As a potential candidate we are leaving
-this in your hands. Please refer to the brief for the complete list of tasks! Complete as much as you can and be
-as creative as you want.
+This project provides the frontend for the HMCTS Caseworker Task Management System. The application is designed to help caseworkers manage their workload efficiently by creating, viewing, updating, and tracking tasks.
 
-To begin with, you should be able to run this by running:
+The frontend interacts with the backend REST API to manage task information and status.
 
-1. `yarn install`
-2. `yarn webpack`
-3. `yarn start:dev` or navigate to package.json and run the script manually
+## Getting Started
 
-You can change the structure however you like!
+Install the dependencies:
+
+```bash
+yarn install
+```
+
+Build the application:
+
+```bash
+yarn webpack
+```
+
+Start the development server:
+
+```bash
+yarn start:dev
+```
+
+Alternatively, run the relevant scripts defined in `package.json`.
+

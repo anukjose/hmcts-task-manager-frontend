@@ -1,121 +1,294 @@
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% extends "template.njk" %}
 
-<!-- You may want to make further use of these components: https://design-system.service.gov.uk/components/
-but ultimately it is up to you -->
-
 {% block content %}
-  <h1 class="govuk-heading-xl">Welcome to your dev test!</h1>
 
-  <!-- The freedom is yours. You can design the solution however you like, however there is a starting point provided
-  to ensure you have both services running. You may want to make use of the Gov UK Components:
-  https://design-system.service.gov.uk/components/ to add tabs and so forth :) -->
+  <h1 class="govuk-heading-xl">HMCTS Task Management System</h1>
 
-  {% if example.id %}
+  <p class="govuk-body">View and manage your tasks.</p>
 
-    {{ govukSummaryList({
-      rows: [
-        {
-          key: {
-            text: "ID"
-          },
-          value: {
-            text: example.id
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change",
-                visuallyHiddenText: "change case id ?!"
-              }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Case Number"
-          },
-          value: {
-            text: example.caseNumber
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change",
-                visuallyHiddenText: "change case number"
-              }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Title"
-          },
-          value: {
-            html: example.title
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change",
-                visuallyHiddenText: "change case title"
-              }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Description"
-          },
-          value: {
-            html: example.description
-          },
-          actions: {
-            items: [
-               {
-                 href: "#",
-                 text: "Delete",
-                 visuallyHiddenText: "Delete description"
-               },
-               {
-                 href: "#",
-                 text: "Change",
-                 visuallyHiddenText: "Change description"
-               }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Status"
-          },
-          value: {
-            html: example.status
-          },
-          actions: {
-            items: [
-            ]
-          }
-        },
-        {
-          key: {
-           text: "Created Date"
-          },
-          value: {
-           html: example.createdDate
-          },
-          actions: {
-           items: [
-           ]
-          }
-        }
-      ]
-    }) }}
+  <p>
+    <a href="/tasks/new" class="govuk-button">Add task</a>
+  </p>
+
+  {% if error %}
+    <div class="govuk-error-summary" role="alert">
+      <div class="govuk-error-summary__body">
+        <p class="govuk-body">{{ error }}</p>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="task-list-header">
+    <h2 class="govuk-heading-l">Your tasks</h2>
+
+    {% if tasks and tasks.length > 0 %}
+      <div class="govuk-form-group task-search-group">
+        <label class="govuk-label" for="task-search">
+          Search tasks
+        </label>
+
+        <input
+          class="govuk-input"
+          id="task-search"
+          name="search"
+          type="search"
+          placeholder="Search by ID, title or description"
+          autocomplete="off"
+        >
+      </div>
+    {% endif %}
+  </div>
+
+  {% if tasks and tasks.length > 0 %}
+
+    <div class="task-table-wrapper">
+      <table class="govuk-table task-table">
+        <caption class="govuk-table__caption govuk-table__caption--m">
+          All tasks
+        </caption>
+
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Task ID</th>
+            <th scope="col" class="govuk-table__header">Title</th>
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">Status</th>
+            <th scope="col" class="govuk-table__header">Due date</th>
+            <th scope="col" class="govuk-table__header">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody class="govuk-table__body">
+          {% for task in tasks %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell task-id">
+                {{ task.id }}
+              </td>
+
+              <td class="govuk-table__cell task-title">
+                {{ task.title }}
+              </td>
+
+              <td class="govuk-table__cell task-description">
+                {{ task.description or "—" }}
+              </td>
+
+              <td class="govuk-table__cell">
+                {% if task.status == "TODO" %}
+                  <span class="task-status task-status--todo">To do</span>
+                {% elif task.status == "IN_PROGRESS" %}
+                  <span class="task-status task-status--progress">In progress</span>
+                {% elif task.status == "COMPLETED" %}
+                  <span class="task-status task-status--completed">Completed</span>
+                {% else %}
+                  <span class="task-status">{{ task.status }}</span>
+                {% endif %}
+              </td>
+
+              <td class="govuk-table__cell task-due-date">
+                {% if task.dueDateTime %}
+                  {{ task.dueDateTime | replace("T", " ") }}
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+
+              <td class="govuk-table__cell task-actions">
+                <div class="task-actions-menu">
+                  <button
+                    class="govuk-button govuk-button--secondary task-actions-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-controls="actions-{{ task.id }}"
+                  >
+                    Actions <span aria-hidden="true">⌄</span>
+                  </button>
+
+                  <div
+                    class="task-actions-panel"
+                    id="actions-{{ task.id }}"
+                    hidden
+                  >
+                    <button
+                      type="button"
+                      class="task-menu-item task-update-toggle"
+                      aria-expanded="false"
+                      aria-controls="status-options-{{ task.id }}"
+                    >
+                      Update status
+                      <span aria-hidden="true">›</span>
+                    </button>
+
+                    <div
+                      class="task-status-options"
+                      id="status-options-{{ task.id }}"
+                      hidden
+                    >
+                      {% for statusOption, statusLabel in [
+                        ["TODO", "To do"],
+                        ["IN_PROGRESS", "In progress"],
+                        ["COMPLETED", "Completed"]
+                      ] %}
+                        {% if task.status != statusOption %}
+                          <form
+                            action="/tasks/{{ task.id }}/status"
+                            method="post"
+                          >
+                            <input
+                              type="hidden"
+                              name="status"
+                              value="{{ statusOption }}"
+                            >
+
+                            <button class="task-menu-item" type="submit">
+                              {{ statusLabel }}
+                            </button>
+                          </form>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+
+                    <div class="task-menu-divider"></div>
+
+                    <form
+                      action="/tasks/{{ task.id }}/delete"
+                      method="post"
+                      onsubmit="return confirm('Are you sure you want to delete task #{{ task.id }}?');"
+                    >
+                      <button
+                        class="task-menu-item task-delete-item"
+                        type="submit"
+                      >
+                        Delete task
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <p
+      class="govuk-body task-search-empty"
+      id="task-search-empty"
+      hidden
+    >
+      No tasks match your search.
+    </p>
+
+  {% elif not error %}
+
+    <p class="govuk-body">There are no tasks yet.</p>
 
   {% endif %}
+
+  <script>
+    // Open one Actions menu at a time.
+    document.querySelectorAll('.task-actions-toggle').forEach((toggle) => {
+      toggle.addEventListener('click', () => {
+        const panel = document.getElementById(
+          toggle.getAttribute('aria-controls')
+        );
+        const willOpen = panel.hidden;
+
+        document.querySelectorAll('.task-actions-panel').forEach((otherPanel) => {
+          otherPanel.hidden = true;
+        });
+
+        document.querySelectorAll('.task-actions-toggle').forEach((otherToggle) => {
+          otherToggle.setAttribute('aria-expanded', 'false');
+        });
+
+        document.querySelectorAll('.task-status-options').forEach((options) => {
+          options.hidden = true;
+        });
+
+        document.querySelectorAll('.task-update-toggle').forEach((button) => {
+          button.setAttribute('aria-expanded', 'false');
+        });
+
+        panel.hidden = !willOpen;
+        toggle.setAttribute('aria-expanded', String(willOpen));
+      });
+    });
+
+    // Show or hide the status choices.
+    document.querySelectorAll('.task-update-toggle').forEach((toggle) => {
+      toggle.addEventListener('click', () => {
+        const options = document.getElementById(
+          toggle.getAttribute('aria-controls')
+        );
+        const willOpen = options.hidden;
+
+        options.hidden = !willOpen;
+        toggle.setAttribute('aria-expanded', String(willOpen));
+      });
+    });
+
+    // Close dropdowns when the user clicks outside them.
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('.task-actions-menu')) {
+        document.querySelectorAll('.task-actions-panel').forEach((panel) => {
+          panel.hidden = true;
+        });
+
+        document.querySelectorAll('.task-actions-toggle').forEach((button) => {
+          button.setAttribute('aria-expanded', 'false');
+        });
+
+        document.querySelectorAll('.task-status-options').forEach((options) => {
+          options.hidden = true;
+        });
+
+        document.querySelectorAll('.task-update-toggle').forEach((button) => {
+          button.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+
+    // Search tasks by ID, title, or description.
+    const taskSearch = document.getElementById('task-search');
+
+    if (taskSearch) {
+      taskSearch.addEventListener('input', () => {
+        const searchTerm = taskSearch.value.trim().toLowerCase();
+        const normalisedSearch = searchTerm.replace(/^#/, '');
+        let visibleTasks = 0;
+
+        document.querySelectorAll('.task-table tbody tr').forEach((row) => {
+          const taskId = row.querySelector('.task-id').textContent
+            .trim()
+            .toLowerCase();
+
+          const title = row.querySelector('.task-title').textContent.toLowerCase();
+
+          const description = row.querySelector('.task-description')
+            .textContent.toLowerCase();
+
+          const matches =
+            taskId.includes(normalisedSearch) ||
+            title.includes(searchTerm) ||
+            description.includes(searchTerm);
+
+          row.hidden = !matches;
+
+          if (matches) {
+            visibleTasks++;
+          }
+        });
+
+        const emptyMessage = document.getElementById('task-search-empty');
+
+        if (emptyMessage) {
+          emptyMessage.hidden = visibleTasks > 0;
+        }
+      });
+    }
+  </script>
 
 {% endblock %}

@@ -1,0 +1,105 @@
+
+{% extends "template.njk" %}
+
+{% block content %}
+
+  <a href="/" class="govuk-back-link">Back to task list</a>
+
+  <h1 class="govuk-heading-xl">Add a task</h1>
+
+  {% if errors.general %}
+    <div class="govuk-error-summary" role="alert">
+      <div class="govuk-error-summary__body">
+        <p class="govuk-body">{{ errors.general }}</p>
+      </div>
+    </div>
+  {% endif %}
+
+  <form action="/tasks" method="post">
+
+    <div class="govuk-form-group {% if errors.title %}govuk-form-group--error{% endif %}">
+      <label class="govuk-label govuk-label--m" for="title">
+        Task title
+      </label>
+
+      {% if errors.title %}
+        <p class="govuk-error-message">{{ errors.title }}</p>
+      {% endif %}
+
+      <input
+        class="govuk-input {% if errors.title %}govuk-input--error{% endif %}"
+        id="title"
+        name="title"
+        type="text"
+        maxlength="200"
+        value="{{ formData.title }}"
+        required
+      >
+    </div>
+
+    <div class="govuk-form-group {% if errors.description %}govuk-form-group--error{% endif %}">
+      <label class="govuk-label govuk-label--m" for="description">
+        Description (optional)
+      </label>
+
+      {% if errors.description %}
+        <p class="govuk-error-message">{{ errors.description }}</p>
+      {% endif %}
+
+      <textarea
+        class="govuk-textarea"
+        id="description"
+        name="description"
+        rows="4"
+        maxlength="5000"
+      >{{ formData.description }}</textarea>
+    </div>
+
+    <div class="govuk-form-group {% if errors.status %}govuk-form-group--error{% endif %}">
+      <label class="govuk-label govuk-label--m" for="status">
+        Status
+      </label>
+
+      {% if errors.status %}
+        <p class="govuk-error-message">{{ errors.status }}</p>
+      {% endif %}
+
+      <select class="govuk-select" id="status" name="status">
+        <option value="TODO" {% if formData.status == "TODO" %}selected{% endif %}>
+          To do
+        </option>
+        <option value="IN_PROGRESS" {% if formData.status == "IN_PROGRESS" %}selected{% endif %}>
+          In progress
+        </option>
+        <option value="COMPLETED" {% if formData.status == "COMPLETED" %}selected{% endif %}>
+          Completed
+        </option>
+      </select>
+    </div>
+
+    <div class="govuk-form-group {% if errors.dueDateTime %}govuk-form-group--error{% endif %}">
+      <label class="govuk-label govuk-label--m" for="dueDateTime">
+        Due date and time
+      </label>
+
+      {% if errors.dueDateTime %}
+        <p class="govuk-error-message">{{ errors.dueDateTime }}</p>
+      {% endif %}
+
+      <input
+        class="govuk-input {% if errors.dueDateTime %}govuk-input--error{% endif %}"
+        id="dueDateTime"
+        name="dueDateTime"
+        type="datetime-local"
+        value="{{ formData.dueDateTime }}"
+        required
+      >
+    </div>
+
+    <button class="govuk-button" type="submit">
+      Create task
+    </button>
+
+  </form>
+
+{% endblock %}
